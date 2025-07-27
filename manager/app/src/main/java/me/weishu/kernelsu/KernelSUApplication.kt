@@ -11,9 +11,9 @@ import okhttp3.OkHttpClient
 import java.io.File
 import java.util.Locale
 
-lateinit var ksuApp: Application
+lateinit var ksuApp: XApplication
 
-class Application : Application() {
+class XApplication : Application() {
 
     lateinit var okhttpClient: OkHttpClient
 
