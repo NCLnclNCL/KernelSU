@@ -4,7 +4,7 @@
 word1=$"com"
 word2=$(tr -dc 'a-z' </dev/urandom | head -c6)
 word3=$(tr -dc 'a-z' </dev/urandom | head -c6)
-
+ 
 # Export variables for use in find -exec
 export word1 word2 word3
 
