@@ -7,7 +7,7 @@ word3=$(tr -dc 'a-z' </dev/urandom | head -c6)
  
 # Export variables for use in find -exec
 export word1 word2 word3
-   
+    
 # Rename directories
 find . -depth -type d -name 'me' -execdir mv {} "$word1" \;
 find . -depth -type d -name 'weishu' -execdir mv {} "$word2" \;
