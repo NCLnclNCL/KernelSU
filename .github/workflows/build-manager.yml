@@ -12,6 +12,7 @@ on:
     branches: [ "main" ]
     paths:
       - 'manager/**'
+  workflow_call:
 
 jobs:
   build-manager:

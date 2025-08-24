@@ -23,13 +23,18 @@
 curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main
 ```
 
+## Suspicious FS (SusFS) Add-On
+
+- `susfs-main`: Synced with latest https://gitlab.com/simonpunk/susfs4ksu.git commit(s), for GKI or non-GKI kernel (backport required).
+- `susfs-legacy`: Synced with `kernel-4.19` of https://gitlab.com/simonpunk/susfs4ksu.git, for non-GKI kernel (stuck in susfs-v1.5.5).
+
 ## Hook method
 
 1. **KPROBES hook:**
     - Used for Loadable Kernel Module (LKM)
     - Default hook method on GKI kernels.
     - Need `# CONFIG_KSU_MANUAL_HOOK is not set` & `CONFIG_KPROBES=y`
-    - Require CONFIG_KPROBES
+    - Require CONFIG_KPROBES to work properly.
 2. **Manual hook:**
     - Require: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source
     - Default hook method on Non-GKI kernels.
@@ -80,3 +85,4 @@ For information on reporting security vulnerabilities in KernelSU, see [SECURITY
 - [genuine](https://github.com/brevent/genuine/): apk v2 signature validation.
 - [Diamorphine](https://github.com/m0nad/Diamorphine): some rootkit skills.
 - [5ec1cff](https://github.com/5ec1cff): magic mount api implementation.
+- [simonpunk](https://gitlab.com/simonpunk/susfs4ksu): susfs add-on.
