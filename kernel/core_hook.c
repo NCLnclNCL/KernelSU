@@ -969,7 +969,7 @@ static void ksu_try_umount(const char *mnt, bool check_mnt, int flags)
 #endif
 	}
 }
-ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
+#ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
 void susfs_try_umount_all(uid_t uid) {
 	susfs_try_umount(uid);
 	/* For Legacy KSU only */
