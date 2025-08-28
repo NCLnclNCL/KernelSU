@@ -1081,7 +1081,7 @@ out_ksu_try_umount:
 		pr_info("handle umount ignore non zygote child: %d\n",
 			current->pid);
 		return 0;
-	
+	}
 	
 #ifdef CONFIG_KSU_DEBUG
 	// umount the target mnt
@@ -1089,6 +1089,7 @@ out_ksu_try_umount:
 		current->pid);
 #endif
 #ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
+out_susfs_try_umount_all:
 	// susfs come first, and lastly umount by ksu, make sure umount in reversed order
 	susfs_try_umount_all(new_uid.val);
 #else
@@ -1105,7 +1106,7 @@ out_ksu_try_umount:
 	// try umount ksu temp path
 	ksu_try_umount("/debug_ramdisk", false, MNT_DETACH);
 	ksu_try_umount("/sbin", false, MNT_DETACH);
-
+#endif
 	return 0;
 }
 // kernel 4.4 and 4.9
