@@ -198,8 +198,8 @@ fn find_temp_path() -> String {
         "/patch_hw",
         "/oem",
         "/root",
-        "/mnt/appfuse/",
         "/mnt/asec/",
+        "/mnt/vendor/",
         defs::TEMP_DIR_LEGACY,
         defs::TEMP_DIR,
     ];
