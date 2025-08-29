@@ -34,7 +34,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - spoofed: false
           - spoofed: true
     uses: ./.github/workflows/build-manager-common.yml
     secrets: inherit
