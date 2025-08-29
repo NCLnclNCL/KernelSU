@@ -189,16 +189,19 @@ fn is_ok_empty(dir: &str) -> bool {
 }
 
 fn find_temp_path() -> String {
-    if is_ok_empty(defs::TEMP_DIR) {
-        return defs::TEMP_DIR.to_string();
-    }
+  //  if is_ok_empty(defs::TEMP_DIR) {
+//        return defs::TEMP_DIR.to_string();
+ //   }
 
     let dirs = [
-        defs::TEMP_DIR,
+
         "/patch_hw",
         "/oem",
         "/root",
+        "/mnt/appfuse/",
+        "/mnt/asec/",
         defs::TEMP_DIR_LEGACY,
+        defs::TEMP_DIR,
     ];
 
     // find empty directory
