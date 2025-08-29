@@ -1101,15 +1101,15 @@ out_susfs_try_umount_all:
 	ksu_try_umount("/system", true, 0, uid);
 	ksu_try_umount("/vendor", true, 0, uid);
 	ksu_try_umount("/product", true, 0, uid);
-	ksu_try_umount("/system_ext", true,, uid);
+	ksu_try_umount("/system_ext", true,0, uid);
 	ksu_try_umount("/odm", true, 0, uid);
 	ksu_try_umount("/oem", false, MNT_DETACH, uid);
 	// try umount modules path
-	ksu_try_umount("/data/adb/modules", false, MNT_DETACH);
+	ksu_try_umount("/data/adb/modules", false, MNT_DETACH,uid);
 
 	// try umount ksu temp path
-	ksu_try_umount("/debug_ramdisk", false, MNT_DETACH);
-	ksu_try_umount("/sbin", false, MNT_DETACH);
+	ksu_try_umount("/debug_ramdisk", false, MNT_DETACH,uid);
+	ksu_try_umount("/sbin", false, MNT_DETACH,uid);
 #endif
 	return 0;
 }
