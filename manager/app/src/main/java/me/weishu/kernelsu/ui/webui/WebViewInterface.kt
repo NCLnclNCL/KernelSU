@@ -22,6 +22,7 @@ import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
+@Suppress("unused")
 class WebViewInterface(
     val context: Context,
     private val webView: WebView,
@@ -61,12 +62,13 @@ class WebViewInterface(
         options: String?,
         callbackFunc: String
     ) {
-        val finalCommand = StringBuilder()
-        processOptions(finalCommand, options)
-        finalCommand.append(cmd)
+        val finalCommand = buildString {
+            processOptions(this, options)
+            append(cmd)
+        }
 
         val result = withNewRootShell(true) {
-            newJob().add(finalCommand.toString()).to(ArrayList(), ArrayList()).exec()
+            newJob().add(finalCommand).to(ArrayList(), ArrayList()).exec()
         }
         val stdout = result.out.joinToString(separator = "\n")
         val stderr = result.err.joinToString(separator = "\n")
@@ -84,20 +86,19 @@ class WebViewInterface(
 
     @JavascriptInterface
     fun spawn(command: String, args: String, options: String?, callbackFunc: String) {
-        val finalCommand = StringBuilder()
+        val finalCommand = buildString {
+            processOptions(this, options)
 
-        processOptions(finalCommand, options)
-
-        if (!TextUtils.isEmpty(args)) {
-            finalCommand.append(command).append(" ")
-            JSONArray(args).let { argsArray ->
-                for (i in 0 until argsArray.length()) {
-                    finalCommand.append(argsArray.getString(i))
-                    finalCommand.append(" ")
+            if (!TextUtils.isEmpty(args)) {
+                append(command).append(" ")
+                JSONArray(args).let { argsArray ->
+                    for (i in 0 until argsArray.length()) {
+                        append("${argsArray.getString(i)} ")
+                    }
                 }
+            } else {
+                append(command)
             }
-        } else {
-            finalCommand.append(command)
         }
 
         val shell = createRootShell(true)
@@ -126,14 +127,14 @@ class WebViewInterface(
             }
         }
 
-        val future = shell.newJob().add(finalCommand.toString()).to(stdout, stderr).enqueue()
+        val future = shell.newJob().add(finalCommand).to(stdout, stderr).enqueue()
         val completableFuture = CompletableFuture.supplyAsync {
             future.get()
         }
 
         completableFuture.thenAccept { result ->
             val emitExitCode =
-                "javascript: (function() { try { ${callbackFunc}.emit('exit', ${result.code}); } catch(e) { console.error(`emitExit error: \${e}`); } })();"
+                $$"javascript: (function() { try { $${callbackFunc}.emit('exit', $${result.code}); } catch(e) { console.error(`emitExit error: ${e}`); } })();"
             webView.post {
                 webView.loadUrl(emitExitCode)
             }
@@ -179,7 +180,7 @@ class WebViewInterface(
     @JavascriptInterface
     fun moduleInfo(): String {
         val moduleInfos = JSONArray(listModules())
-        var currentModuleInfo = JSONObject()
+        val currentModuleInfo = JSONObject()
         currentModuleInfo.put("moduleDir", modDir)
         val moduleId = File(modDir).getName()
         for (i in 0 until moduleInfos.length()) {
@@ -189,7 +190,7 @@ class WebViewInterface(
                 continue
             }
 
-            var keys = currentInfo.keys()
+            val keys = currentInfo.keys()
             for (key in keys) {
                 currentModuleInfo.put(key, currentInfo.get(key))
             }

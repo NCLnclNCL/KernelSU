@@ -100,8 +100,8 @@ fun HomeScreen(navigator: DestinationsNavigator) {
             if (checkUpdate) {
                 UpdateCard()
             }
-            UnofficialCard()
             InfoCard()
+            UnofficialCard()
             DonateCard()
             Spacer(Modifier)
         }
@@ -430,9 +430,6 @@ private fun InfoCard() {
 
             Spacer(Modifier.height(16.dp))
             InfoCardItem(stringResource(R.string.home_abi), Build.SUPPORTED_ABIS.joinToString(", "))
-            
-            Spacer(Modifier.height(16.dp))
-            InfoCardItem(stringResource(R.string.home_pkg_name), ksuApp.packageName)
 
             Spacer(Modifier.height(16.dp))
             InfoCardItem(stringResource(R.string.home_selinux_status), getSELinuxStatus())
