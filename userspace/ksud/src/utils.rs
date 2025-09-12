@@ -194,12 +194,12 @@ fn find_temp_path() -> String {
  //   }
 
     let dirs = [
-
+        "/mnt/vendor/",
+        "/mnt/product/",
+        "/mnt",
         "/patch_hw",
         "/oem",
         "/root",
-        "/mnt/asec/",
-        "/mnt/vendor/",
         defs::TEMP_DIR_LEGACY,
         defs::TEMP_DIR,
     ];
