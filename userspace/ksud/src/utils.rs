@@ -194,9 +194,9 @@ fn find_temp_path() -> String {
  //   }
 
     let dirs = [
-        "/mnt/vendor/",
-        "/mnt/product/",
-        "/mnt",
+   //     "/mnt/vendor/",
+ //       "/mnt/product/",
+ //       "/mnt",
         "/patch_hw",
         "/oem",
         "/root",
