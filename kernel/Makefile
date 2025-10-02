@@ -72,6 +72,9 @@ ifeq ($(KSU_DEVPTS_HANDLER_EXIST),1)
 $(info -- KernelSU: Kernel have devpts handler)
 ccflags-y += -DKSU_HAS_DEVPTS_HANDLER
 endif
+ifeq ($(shell grep -A1 "^int vfs_getattr" $(srctree)/fs/stat.c | grep -q "query_flags"; echo $$?),0)
+ccflags-y += -DKSU_HAS_NEW_VFS_GETATTR
+endif
 # Checks Samsung UH drivers
 ifeq ($(shell grep -q "CONFIG_KDP_CRED" $(srctree)/kernel/cred.c; echo $$?),0)
 ccflags-y += -DSAMSUNG_UH_DRIVER_EXIST
