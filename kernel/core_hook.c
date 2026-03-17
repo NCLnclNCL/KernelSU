@@ -357,7 +357,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	// compare 0xdeadbeef call to a non-0xdeadbeef call
 	if (KERNEL_SU_OPTION != option)
 		return 0;
-
+    uid_t current_uid_val = current_uid().val;
 	// just continue old logic
 	bool from_root = 0 == current_uid().val;
 	bool from_manager = ksu_is_manager();
