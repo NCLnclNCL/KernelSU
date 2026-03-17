@@ -353,25 +353,6 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	// if success, we modify the arg5 as result!
 	u32 *result = (u32 *)arg5;
 	u32 reply_ok = KERNEL_SU_OPTION;
-	uid_t current_uid_val = current_uid().val;
-
-	// skip this private space support if uid below 100k
-	if (current_uid_val < 100000)
-		goto skip_check;
-
-	uid_t manager_uid = ksu_get_manager_uid();
-	if (current_uid_val != manager_uid && 
-		current_uid_val % 100000 == manager_uid) {
-			ksu_set_manager_uid(current_uid_val);
-	}
-
-skip_check:
-	// yes this causes delay, but this keeps the delay consistent, which is what we want
-	// with a barrier for safety as the compiler might try to do something smart.
-	kcompat_barrier();
-	if (!is_allow_su())
-		return 0;
-
 	// we move it after uid check here so they cannot
 	// compare 0xdeadbeef call to a non-0xdeadbeef call
 	if (KERNEL_SU_OPTION != option)
