@@ -433,7 +433,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 				pr_info("boot_complete triggered\n");
 			}
 #ifdef CONFIG_KSU_SUSFS
-       //     susfs_start_sdcard_monitor_fn();
+            susfs_start_sdcard_monitor_fn();
 #endif // #ifdef CONFIG_KSU_SUSFS
 
 			break;
