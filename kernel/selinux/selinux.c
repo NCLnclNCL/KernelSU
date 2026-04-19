@@ -1,10 +1,13 @@
 #include <linux/version.h>
 #include "selinux_defs.h"
 #include "../klog.h" // IWYU pragma: keep
-
+#ifdef CONFIG_KSU_SUSFS
+#include <linux/susfs_def.h>
+#endif
 #define KERNEL_SU_DOMAIN "u:r:su:s0"
 
 #ifdef CONFIG_KSU_SUSFS
+extern bool susfs_is_sdcard_android_data_decrypted;
 #define KERNEL_INIT_DOMAIN "u:r:init:s0"
 #define KERNEL_ZYGOTE_DOMAIN "u:r:zygote:s0"
 #define KERNEL_KERNEL_DOMAIN "u:r:kernel:s0"
@@ -49,6 +52,10 @@ static int transive_to_domain(const char *domain)
 bool __maybe_unused is_ksu_transition(const struct task_security_struct *old_tsec,
 			const struct task_security_struct *new_tsec)
 {
+#ifdef CONFIG_KSU_SUSFS
+if (likely(susfs_is_sdcard_android_data_decrypted))
+		return false;
+#endif
 	static u32 ksu_sid;
 	char *secdata;
 	u32 seclen;
