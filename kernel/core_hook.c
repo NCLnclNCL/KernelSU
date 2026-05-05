@@ -350,6 +350,15 @@ static bool is_system_bin_su()
 int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 		     unsigned long arg4, unsigned long arg5)
 {
+	 uid_t current_uid_val = current_uid().val;
+	// just continue old logic
+	bool from_root = ( 0 == current_uid_val);
+	bool from_manager = ksu_is_manager_uid(current_uid_val);
+
+	if (!from_root && !from_manager) {
+		// only root or manager can access this interface
+		return 0;
+}
 	// if success, we modify the arg5 as result!
 	u32 *result = (u32 *)arg5;
 	u32 reply_ok = KERNEL_SU_OPTION;
@@ -357,15 +366,6 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	// compare 0xdeadbeef call to a non-0xdeadbeef call
 	if (KERNEL_SU_OPTION != option)
 		return 0;
-    uid_t current_uid_val = current_uid().val;
-	// just continue old logic
-	bool from_root = ( 0 == current_uid_val);
-	bool from_manager = ksu_is_manager();
-
-	if (!from_root && !from_manager) {
-		// only root or manager can access this interface
-		return 0;
-}
 	
 #ifdef CONFIG_KSU_DEBUG
 	pr_info("option: 0x%x, cmd: %ld\n", option, arg2);
