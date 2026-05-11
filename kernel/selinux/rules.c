@@ -14,7 +14,7 @@
 #endif
 
 #define KERNEL_SU_DOMAIN "su"
-#define KERNEL_SU_FILE "ksu_file"
+#define KERNEL_SU_FILE "hex_file"
 #define KERNEL_EXEC_TYPE "ksu_exec"
 #define ALL NULL
 
