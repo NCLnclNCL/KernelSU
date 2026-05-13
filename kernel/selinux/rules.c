@@ -71,29 +71,29 @@ void ksu_apply_kernelsu_rules()
 	}
 
 	// we need to save allowlist in /data/adb/ksu
-	ksu_allow(db, "kernel", "adb_data_file", "dir", ALL);
-	ksu_allow(db, "kernel", "adb_data_file", "file", ALL);
+	ksu_allow(db, "hex", "adb_data_file", "dir", ALL);
+	ksu_allow(db, "hex", "adb_data_file", "file", ALL);
 	// we need to search /data/app
-	// ksu_allow(db, "kernel", "apk_data_file", "file", ALL);
-	// ksu_allow(db, "kernel", "apk_data_file", "dir", ALL);
+	// ksu_allow(db, "hex", "apk_data_file", "file", ALL);
+	// ksu_allow(db, "hex", "apk_data_file", "dir", ALL);
 	
-	ksu_allow(db, "kernel", "apk_data_file", "file", "open");
-	ksu_allow(db, "kernel", "apk_data_file", "dir", "open");
-	ksu_allow(db, "kernel", "apk_data_file", "dir", "read");
-	ksu_allow(db, "kernel", "apk_data_file", "dir", "search");
+	ksu_allow(db, "hex", "apk_data_file", "file", "open");
+	ksu_allow(db, "hex", "apk_data_file", "dir", "open");
+	ksu_allow(db, "hex", "apk_data_file", "dir", "read");
+	ksu_allow(db, "hex", "apk_data_file", "dir", "search");
 	// we may need to do mount on shell
-	ksu_allow(db, "kernel", "shell_data_file", "file", ALL);
+	ksu_allow(db, "hex", "shell_data_file", "file", ALL);
 	// we need to read /data/system/packages.list
-	ksu_allow(db, "kernel", "kernel", "capability", "dac_override");
+	ksu_allow(db, "hex", "kernel", "capability", "dac_override");
 	// Android 10+:
 	// http://aospxref.com/android-12.0.0_r3/xref/system/sepolicy/private/file_contexts#512
-	ksu_allow(db, "kernel", "packages_list_file", "file", ALL);
+	ksu_allow(db, "hex", "packages_list_file", "file", ALL);
 	// Kernel 4.4
-	ksu_allow(db, "kernel", "packages_list_file", "dir", ALL);
+	ksu_allow(db, "hex", "packages_list_file", "dir", ALL);
 	// Android 9-:
 	// http://aospxref.com/android-9.0.0_r61/xref/system/sepolicy/private/file_contexts#360
-	ksu_allow(db, "kernel", "system_data_file", "file", ALL);
-	ksu_allow(db, "kernel", "system_data_file", "dir", ALL);
+	ksu_allow(db, "hex", "system_data_file", "file", ALL);
+	ksu_allow(db, "hex", "system_data_file", "dir", ALL);
 	// our ksud triggered by init
 	ksu_allow(db, "init", "adb_data_file", "file", ALL);
 	ksu_allow(db, "init", "adb_data_file", "dir", ALL); // #1289
