@@ -74,13 +74,13 @@ void ksu_apply_kernelsu_rules()
 	ksu_allow(db, "kernel", "adb_data_file", "dir", ALL);
 	ksu_allow(db, "kernel", "adb_data_file", "file", ALL);
 	// we need to search /data/app
-	 ksu_allow(db, "kernel", "apk_data_file", "file", ALL);
-	 ksu_allow(db, "kernel", "apk_data_file", "dir", ALL);
+	// ksu_allow(db, "kernel", "apk_data_file", "file", ALL);
+	// ksu_allow(db, "kernel", "apk_data_file", "dir", ALL);
 	
-//	ksu_allow(db, "kernel", "apk_data_file", "file", "open");
-//	ksu_allow(db, "kernel", "apk_data_file", "dir", "open");
-//	ksu_allow(db, "kernel", "apk_data_file", "dir", "read");
-//	ksu_allow(db, "kernel", "apk_data_file", "dir", "search");
+	ksu_allow(db, "kernel", "apk_data_file", "file", "open");
+	ksu_allow(db, "kernel", "apk_data_file", "dir", "open");
+	ksu_allow(db, "kernel", "apk_data_file", "dir", "read");
+	ksu_allow(db, "kernel", "apk_data_file", "dir", "search");
 	// we may need to do mount on shell
 	ksu_allow(db, "kernel", "shell_data_file", "file", ALL);
 	// we need to read /data/system/packages.list
