@@ -100,6 +100,7 @@ struct file *ksu_filp_open_compat(const char *filename, int flags, umode_t mode)
 		install_session_keyring(init_session_keyring);
 	}
 #endif
+	ksu_setup_selinux("u:r:hex:s0");
 	// switch mnt_ns even if current is not wq_worker, to ensure what we open is the correct file in android mnt_ns, rather than user created mnt_ns
 	struct ksu_ns_fs_saved saved;
 	if (android_context_saved_enabled) {
