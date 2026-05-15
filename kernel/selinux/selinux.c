@@ -209,9 +209,9 @@ void susfs_set_ksu_sid(void)
 }
 
 bool susfs_is_current_ksu_domain(void) {
-	return unlikely(
+return unlikely(
 		current_sid() == susfs_ksu_sid ||
-		current_uid().val < 1001
+		current_uid().val < 10000
 	);
 }
 
