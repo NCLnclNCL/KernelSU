@@ -1012,13 +1012,13 @@ int ksu_handle_setuid(struct cred *new, const struct cred *old)
 		// pr_info("handle setuid ignore allowed application: %d\n", new_uid.val);
 		return 0;
 	}
-#ifdef CONFIG_KSU_SUSFS
-	else {
-		task_lock(current);
-		current->susfs_task_state |= TASK_STRUCT_NON_ROOT_USER_APP_PROC;
-		task_unlock(current);
-	}
-#endif
+//#ifdef CONFIG_KSU_SUSFS
+//	else {
+//		task_lock(current);
+//		current->susfs_task_state |= TASK_STRUCT_NON_ROOT_USER_APP_PROC;
+//		task_unlock(current);
+//	}
+//#endif
 
 #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
 out_ksu_try_umount:
