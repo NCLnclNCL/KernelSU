@@ -70,10 +70,7 @@ extern bool susfs_is_log_enabled __read_mostly;
 #ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
 extern void susfs_run_try_umount_for_current_mnt_ns(void);
 #endif // #ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-static bool susfs_is_umount_for_zygote_system_process_enabled = false;
-static bool susfs_is_umount_for_zygote_iso_service_enabled = false;
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+static bool try_umount_enabled = false;
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT
 extern bool susfs_is_auto_add_sus_bind_mount_enabled;
 #endif // #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT
@@ -83,21 +80,15 @@ extern bool susfs_is_auto_add_sus_ksu_default_mount_enabled;
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT
 extern bool susfs_is_auto_add_try_umount_for_bind_mount_enabled;
 #endif // #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT
+#define DATA_ADB_TRY_UMOUNT "/data/adb/try_umount"
 
 static inline void susfs_on_post_fs_data(void) {
 	struct path path;
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-	if (!kern_path(DATA_ADB_UMOUNT_FOR_ZYGOTE_SYSTEM_PROCESS, 0, &path)) {
-		susfs_is_umount_for_zygote_system_process_enabled = true;
+	if (!kern_path(DATA_ADB_TRY_UMOUNT, 0, &path)) {
+		try_umount_enabled = true;
 		path_put(&path);
 	}
-	pr_info("susfs_is_umount_for_zygote_system_process_enabled: %d\n", susfs_is_umount_for_zygote_system_process_enabled);
-	if (!kern_path(DATA_ADB_UMOUNT_FOR_ZYGOTE_ISO_SERVICE, 0, &path)) {
-		susfs_is_umount_for_zygote_iso_service_enabled = true;
-		path_put(&path);
-	}
-	pr_info("susfs_is_umount_for_zygote_iso_service_enabled: %d\n", susfs_is_umount_for_zygote_iso_service_enabled);
-#endif // #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+	pr_info("try_umount_enabled: %d\n", try_umount_enabled);
 #ifdef CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT
 	if (!kern_path(DATA_ADB_NO_AUTO_ADD_SUS_BIND_MOUNT, 0, &path)) {
 		susfs_is_auto_add_sus_bind_mount_enabled = false;
@@ -358,7 +349,7 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 	if (!from_root && !from_manager) {
 		// only root or manager can access this interface
 		return 0;
-}
+	}
 	// if success, we modify the arg5 as result!
 	u32 *result = (u32 *)arg5;
 	u32 reply_ok = KERNEL_SU_OPTION;
@@ -986,6 +977,10 @@ void susfs_try_umount_all(uid_t uid) {
 #endif
 int ksu_handle_setuid(struct cred *new, const struct cred *old)
 {
+	if (!try_umount_enabled)
+	{
+		return 0
+	}
 	// this hook is used for umounting overlayfs for some uid, if there isn't any module mounted, just ignore it!
 	if (!ksu_module_mounted) {
 		return 0;
