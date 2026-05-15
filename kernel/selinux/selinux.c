@@ -221,7 +221,7 @@ void susfs_set_init_sid(void)
 }
 
 bool susfs_is_current_init_domain(void) {
-	return unlikely(current_sid() == susfs_init_sid);
+		return unlikely(current_sid() == susfs_ksu_sid);
 }
 
 void susfs_set_kernel_sid(void)
