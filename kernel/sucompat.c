@@ -116,7 +116,7 @@ int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 
 int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 {
-	if (!is_su_allowed(filename_user) && !is_check_allowed(filename_user))
+	if (!is_su_allowed(filename_user))
 		return 0;
 	return ksu_sucompat_user_common(filename_user, "newfstatat", false);
 }
