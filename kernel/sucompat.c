@@ -84,7 +84,7 @@ static inline bool __is_check_allowed(const void *ptr_to_check)
 #define is_check_allowed(ptr)	__is_check_allowed((const void *)ptr)
 static int ksu_sucompat_user_common(const char __user **filename_user,
 				const char *syscall_name,
-				const bool escalate)
+				const bool escalate, bool root)
 {
 	char path[sizeof(su)]; // sizeof includes nullterm already!
 	memset(path, 0, sizeof(path));
@@ -93,7 +93,8 @@ static int ksu_sucompat_user_common(const char __user **filename_user,
 
 	if (memcmp(path, su, sizeof(su)))
 		return 0;
-
+    if!(root)
+		return 0;
 	if (escalate) {
 		pr_info("%s su found\n", syscall_name);
 		*filename_user = ksud_user_path();
@@ -109,23 +110,17 @@ static int ksu_sucompat_user_common(const char __user **filename_user,
 int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 			 int *__unused_flags)
 {
-if (is_su_allowed(filename_user)) {
-        // pass
-} else if (is_check_allowed(filename_user)) {
-        // with a barrier for safety as the compiler might try to do something smart.
-        kcompat_barrier();
+	bool root = is_su_allowed(filename_user);
+	if (!root && !is_check_allowed(filename_user))
         return 0;
-} else {
-        return 0;
-}
-	return ksu_sucompat_user_common(filename_user, "faccessat", false);
+	return ksu_sucompat_user_common(filename_user, "faccessat", false, root);
 }
 
 int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 {
 	if (!is_su_allowed(filename_user))
 		return 0;
-	return ksu_sucompat_user_common(filename_user, "newfstatat", false);
+	return ksu_sucompat_user_common(filename_user, "newfstatat", false,true);
 }
 
 int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
@@ -135,7 +130,7 @@ int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
 	if (!is_su_allowed(filename_user))
 		return 0;
 
-	return ksu_sucompat_user_common(filename_user, "sys_execve", true);
+	return ksu_sucompat_user_common(filename_user, "sys_execve", true,true);
 }
 
 int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
