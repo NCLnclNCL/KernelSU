@@ -73,7 +73,7 @@ static inline bool __is_check_allowed(const void *ptr_to_check)
 	if (!ksu_sucompat_hook_state)
 		return false;
 #endif
-	if (likely(!ksu_uid_should_umount((current_uid().val)))
+	if (likely(!ksu_uid_should_umount(current_uid().val)))
 		return false;
 
 	if (unlikely(!ptr_to_check))
