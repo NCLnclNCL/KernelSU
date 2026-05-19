@@ -104,6 +104,7 @@ int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 
 int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 {
+	uid_t current_uid_val = current_uid().val;
 	if (!is_su_allowed(filename_user))
 		return 0;
 	pr_info("ksu_handle_stat by: %d with process: %s\n", __func__, current_uid_val, current->comm);
