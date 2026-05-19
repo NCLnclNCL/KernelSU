@@ -109,13 +109,13 @@ static int ksu_sucompat_user_common(const char __user **filename_user,
 int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 			 int *__unused_flags)
 {
-	if (is_check_allowed(filename_user)) {
+if (!is_su_allowed(filename_user)) {
+        return 0;
+} else if (is_check_allowed(filename_user)) {
         // with a barrier for safety as the compiler might try to do something smart.
         kcompat_barrier();
         return 0;
-	}
-	if (!is_su_allowed(filename_user))
-		return 0;
+}
 	return ksu_sucompat_user_common(filename_user, "faccessat", false);
 }
 
