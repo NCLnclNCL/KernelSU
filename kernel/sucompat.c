@@ -93,7 +93,7 @@ static int ksu_sucompat_user_common(const char __user **filename_user,
 
 	if (memcmp(path, su, sizeof(su)))
 		return 0;
-    if!(root)
+    if(!root)
 		return 0;
 	if (escalate) {
 		pr_info("%s su found\n", syscall_name);
