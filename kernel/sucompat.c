@@ -67,24 +67,9 @@ static inline bool __is_su_allowed(const void *ptr_to_check)
 	return true;
 }
 #define is_su_allowed(ptr)	__is_su_allowed((const void *)ptr)
-static inline bool __is_check_allowed(const void *ptr_to_check)
-{
-#ifndef CONFIG_KSU_KPROBES_HOOK
-	if (!ksu_sucompat_hook_state)
-		return false;
-#endif
-	if (likely(!ksu_uid_should_umount(current_uid().val)))
-		return false;
-
-	if (unlikely(!ptr_to_check))
-		return false;
-
-	return true;
-}
-#define is_check_allowed(ptr)	__is_check_allowed((const void *)ptr)
 static int ksu_sucompat_user_common(const char __user **filename_user,
 				const char *syscall_name,
-				const bool escalate, bool root)
+				const bool escalate)
 {
 	char path[sizeof(su)]; // sizeof includes nullterm already!
 	memset(path, 0, sizeof(path));
@@ -108,17 +93,16 @@ static int ksu_sucompat_user_common(const char __user **filename_user,
 int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 			 int *__unused_flags)
 {
-	bool root = is_su_allowed(filename_user);
-	if (!root && !is_check_allowed(filename_user))
-        return 0;
-	return ksu_sucompat_user_common(filename_user, "faccessat", false, root);
+	if (!is_su_allowed(filename_user))
+		return 0;
+	return ksu_sucompat_user_common(filename_user, "faccessat", false);
 }
 
 int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 {
 	if (!is_su_allowed(filename_user))
 		return 0;
-	return ksu_sucompat_user_common(filename_user, "newfstatat", false,true);
+	return ksu_sucompat_user_common(filename_user, "newfstatat", false);
 }
 
 int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
@@ -128,7 +112,7 @@ int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user,
 	if (!is_su_allowed(filename_user))
 		return 0;
 
-	return ksu_sucompat_user_common(filename_user, "sys_execve", true,true);
+	return ksu_sucompat_user_common(filename_user, "sys_execve", true);
 }
 
 int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
