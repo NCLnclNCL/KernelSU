@@ -7,7 +7,7 @@ config KSU
 	  Enable kernel-level root privileges on Android System.
 	  To compile as a module, choose M here: the
 	  module will be called kernelsu.
-config CONFIG_KSU_LSM_SECURITY_HOOKS
+config KSU_LSM_SECURITY_HOOKS
 	bool "KernelSU LSM Hook"
 	depends on KSU
 	default n
