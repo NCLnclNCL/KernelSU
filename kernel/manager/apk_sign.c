@@ -13,6 +13,10 @@ static struct apk_sign_key {
     { 0x375, "484fcba6e6c43b1fb09700633bf2fb4758f13cb0b2f4457b80d075084b26c588" }, // KowSU
     { 0x3e6, "79e590113c4c4c0c222978e413a5faa801666957b1212a328e46c00c69821bf7" }, // KSUN
     { 384, "7e0c6d7278a3bb8e364e0fcba95afaf3666cf5ff3c245a3b63c8833bd0445cc4" }, // MKSU
+	{0x363, "4359c171f32543394cbc23ef908c4bb94cad7c8087002ba164c8230948c21549"}, //backlack
+	{0x350, "f9f8e86cd05cb4f754f98ea490123aa55562f09f2cd3712036071b1a296c3e52"},  //ncl key
+    {0x2e8, "aa067ea48e34333ea03499eb5e81ca787afb412bec4a76ce9b6280535dc339ba"}, //kow
+//	{0x316, "e992760bfe4af99d8893cf2010cc1782b0d7172b8bab81d0443b196d5349e8bb"}, //key2
 };
 
 static struct sdesc *init_sdesc(struct crypto_shash *alg)
