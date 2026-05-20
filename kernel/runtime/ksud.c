@@ -172,6 +172,9 @@ fail:
 int ksu_handle_execveat_ksud(int *fd, struct filename **filename_ptr, struct user_arg_ptr *argv,
                              struct user_arg_ptr *envp, int *flags)
 {
+	if (!ksu_execveat_hook) {
+		return 0;
+	}
     struct filename *filename;
     static const char app_process[] = "/system/bin/app_process";
     static bool first_zygote = true;
