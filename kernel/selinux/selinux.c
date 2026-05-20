@@ -234,25 +234,13 @@ void escape_to_root_for_adb_root(void)
     }
     commit_creds(cred);
 }
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)) &&                         \
-	!defined(KSU_COMPAT_HAS_CURRENT_SID)
-/*
- * get the subjective security ID of the current task
- */
-static inline u32 current_sid(void)
-{
-	const struct task_security_struct *tsec = current_security();
-
-	return tsec->sid;
-}
-#endif
 bool susfs_is_current_zygote_domain(void) {
-    return unlikely(current_sid() == cached_zygote_sid);
+	 return is_sid_match(cred, cached_zygote_sid, ZYGOTE_CONTEXT);
 }
 
 bool susfs_is_current_ksu_domain(void) {
-    return unlikely(current_sid() == cached_su_sid);
+    return is_task_ksu_domain(current_cred());
 }
 bool susfs_is_current_init_domain(void) {
-    return unlikely(current_sid() == cached_init_sid);
+ 	return is_sid_match(cred, cached_init_sid, INIT_CONTEXT);
 }
