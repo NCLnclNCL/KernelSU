@@ -1,11 +1,7 @@
-#if defined(CONFIG_KSU_LSM_SECURITY_HOOKS)
-#define LSM_HOOK_TYPE static int
-#else
-#define LSM_HOOK_TYPE int
-#endif
+
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0) || defined(CONFIG_IS_HW_HISI) ||                                     \
     defined(CONFIG_KSU_ALLOWLIST_WORKAROUND)
-LSM_HOOK_TYPE ksu_key_permission(key_ref_t key_ref, const struct cred *cred, unsigned perm)
+int ksu_key_permission(key_ref_t key_ref, const struct cred *cred, unsigned perm)
 {
     if (init_session_keyring != NULL) {
         return 0;
@@ -21,7 +17,7 @@ LSM_HOOK_TYPE ksu_key_permission(key_ref_t key_ref, const struct cred *cred, uns
 }
 #endif
 
-LSM_HOOK_TYPE ksu_task_fix_setuid(struct cred *new, const struct cred *old, int flags)
+int ksu_task_fix_setuid(struct cred *new, const struct cred *old, int flags)
 {
     uid_t new_uid, old_uid = 0;
 
