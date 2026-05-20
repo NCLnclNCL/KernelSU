@@ -36,5 +36,8 @@ int handle_sepolicy(void __user *user_data, u64 data_len);
 void setup_ksu_cred(void);
 
 void escape_to_root_for_adb_root();
+bool susfs_is_current_zygote_domain(void);
+bool susfs_is_current_ksu_domain(void);
+bool susfs_is_current_init_domain(void);
 
 #endif

@@ -234,3 +234,13 @@ void escape_to_root_for_adb_root(void)
     }
     commit_creds(cred);
 }
+bool susfs_is_current_zygote_domain(void) {
+    return unlikely(current_sid() == cached_zygote_sid);
+}
+
+bool susfs_is_current_ksu_domain(void) {
+    return unlikely(current_sid() == cached_su_sid);
+}
+bool susfs_is_current_init_domain(void) {
+    return unlikely(current_sid() == cached_init_sid);
+}
