@@ -2,7 +2,7 @@
 #define LSM_HOOK_TYPE static int
 #else
 #define LSM_HOOK_TYPE int
-
+#endif
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0) || defined(CONFIG_IS_HW_HISI) ||                                     \
     defined(CONFIG_KSU_ALLOWLIST_WORKAROUND)
 LSM_HOOK_TYPE ksu_key_permission(key_ref_t key_ref, const struct cred *cred, unsigned perm)
