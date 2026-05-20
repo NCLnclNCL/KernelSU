@@ -10,7 +10,7 @@ config KSU
 config CONFIG_KSU_LSM_SECURITY_HOOKS
 	bool "KernelSU LSM Hook"
 	depends on KSU
-	default y
+	default n
 	help
 	  Enable Linux Security Module (LSM) hooks support for
 	  KernelSU.
