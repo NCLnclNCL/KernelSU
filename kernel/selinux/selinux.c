@@ -234,6 +234,18 @@ void escape_to_root_for_adb_root(void)
     }
     commit_creds(cred);
 }
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)) &&                         \
+	!defined(KSU_COMPAT_HAS_CURRENT_SID)
+/*
+ * get the subjective security ID of the current task
+ */
+static inline u32 current_sid(void)
+{
+	const struct task_security_struct *tsec = current_security();
+
+	return tsec->sid;
+}
+#endif
 bool susfs_is_current_zygote_domain(void) {
     return unlikely(current_sid() == cached_zygote_sid);
 }
