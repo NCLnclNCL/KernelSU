@@ -1,6 +1,38 @@
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0) && LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
 #define KSUD_PATH "/data/adb/ksud"
 extern bool ksu_boot_completed;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 8, 0) 
+__weak long copy_from_user_nofault(void *dst, const void __user *src, size_t size)
+{
+	// https://elixir.bootlin.com/linux/v5.8/source/mm/maccess.c#L205
+	long ret = -EFAULT;
+	mm_segment_t old_fs = get_fs();
+
+	set_fs(USER_DS);
+
+	// normally theres an access_ok check here
+	// but for what we use it, it will always be true.
+	// so we skip it
+	pagefault_disable();
+	ret = __copy_from_user_inatomic(dst, src, size);
+	pagefault_enable();
+
+	set_fs(old_fs);
+
+	if (ret)
+		return -EFAULT;
+	return 0;
+}
+#endif
+static __always_inline long ksu_copy_from_user_retry(void *to, const void __user *from, unsigned long count)
+{
+	long ret = copy_from_user_nofault(to, from, count);
+	if (likely(!ret))
+		return ret;
+
+	// we faulted! fallback to slow path
+	return copy_from_user(to, from, count);
+}
 __attribute__((cold)) noinline void sys_execve_escape_ksud_internal(void *filename)
 {	if (unlikely(!ksu_boot_completed))
 {
