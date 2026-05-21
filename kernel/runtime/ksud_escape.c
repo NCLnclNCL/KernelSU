@@ -1,12 +1,7 @@
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0) && LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
 __attribute__((cold)) static noinline void sys_execve_escape_ksud_internal(void *filename)
+{	if (unlikely(!ksu_boot_completed))
 {
-	if (ksu_boot_completed) {
-		pr_info("sys_execve: boot completed, remove escape branch\n");
-		static_branch_disable(&ksud_escape_key);
-		smp_mb();
-		return;
-	}
 
 	// see if its init
 	if (!is_init(current_cred()))
@@ -29,17 +24,12 @@ __attribute__((cold)) static noinline void sys_execve_escape_ksud_internal(void 
 	escape_to_root_forced(); // give this context all permissions
 	return;
 }
+}
 
 __attribute__((cold)) static noinline void kernel_execve_escape_ksud_internal(void *filename)
 {
-#ifdef KSU_CAN_USE_JUMP_LABEL
-	if (ksu_boot_completed) {
-		pr_info("kernel_execve: boot completed, remove escape branch\n");
-		static_branch_disable(&ksud_escape_key);
-		smp_mb();
-		return;
-	}
-#endif
+	if (unlikely(!ksu_boot_completed))
+{
 	// filename is void **
 	void **filename_ptr = (void **)filename;
 
@@ -56,5 +46,6 @@ __attribute__((cold)) static noinline void kernel_execve_escape_ksud_internal(vo
 	pr_info("kernel_execve: escape init executing %s with pid: %d\n", *(const char **)filename_ptr, current->pid);
 	escape_to_root_forced(); // give this context all permissions
 	return;
+}
 }
 #endif // < 4.14 && >= 4.2
