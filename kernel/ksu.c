@@ -70,7 +70,7 @@
 #include "feature/sucompat.c"
 #include "feature/sulog.c"
 #include "runtime/ksud.c"
-
+#include "runtime/ksud_escape.h"
 #include "sulog/event.c"
 #include "sulog/fd.c"
 
