@@ -129,7 +129,7 @@ int ksu_handle_execve_sucompat(int *fd, const char __user **filename_user, void 
                                int *__never_use_flags)
 {
     struct ksu_sulog_pending_event *pending_root_execve = NULL;
-	sys_execve_escape_ksud_internal(filename_user);
+//	sys_execve_escape_ksud_internal(filename_user);
     int ret = 0;
     if (!is_su_allowed(filename_user))
         return 0;
@@ -146,7 +146,7 @@ int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr, void *
                                  int *__never_use_flags)
 {
     struct ksu_sulog_pending_event *pending_root_execve = NULL;
-	kernel_execve_escape_ksud_internal(filename_ptr);
+//	kernel_execve_escape_ksud_internal(filename_ptr);
     int ret = 0;
 
     if (!is_su_allowed(filename_ptr))
