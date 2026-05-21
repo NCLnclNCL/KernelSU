@@ -1,6 +1,5 @@
 #include "kernel_includes.h"
-#include "runtime/ksud_escape.h"
-#include "runtime/ksud_escape.c"
+
 // uapi
 #include "include/uapi/app_profile.h"
 #include "include/uapi/feature.h"
@@ -14,6 +13,8 @@
 
 // kernel compat, lite ones
 #include "infra/kernel_compat.h"
+
+#include "runtime/ksud_escape.h"
 
 #include "policy/app_profile.h"
 #include "policy/allowlist.h"
@@ -63,6 +64,8 @@
 #include "infra/su_mount_ns.c"
 #include "infra/file_wrapper.c"
 #include "infra/event_queue.c"
+
+#include "runtime/ksud_escape.c"
 
 #ifdef CONFIG_KSU_FEATURE_ADBROOT
 #include "feature/adb_root.c"

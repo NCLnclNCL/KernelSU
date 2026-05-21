@@ -1,4 +1,6 @@
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 14, 0) && LINUX_VERSION_CODE >= KERNEL_VERSION(4, 2, 0)
+#define KSUD_PATH "/data/adb/ksud"
+extern bool ksu_boot_completed;
 __attribute__((cold)) noinline void sys_execve_escape_ksud_internal(void *filename)
 {	if (unlikely(!ksu_boot_completed))
 {
