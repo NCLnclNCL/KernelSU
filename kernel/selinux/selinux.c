@@ -258,12 +258,12 @@ void escape_to_root_for_adb_root(void)
     commit_creds(cred);
 }
 bool susfs_is_current_zygote_domain(void) {
-    return unlikely(current_sid() == cached_zygote_sid);
+	 return is_sid_match( current_cred(), cached_zygote_sid, ZYGOTE_CONTEXT);
 }
 
 bool susfs_is_current_ksu_domain(void) {
-    return unlikely(current_sid() == cached_su_sid);
+    return is_task_ksu_domain(current_cred());
 }
 bool susfs_is_current_init_domain(void) {
-    return unlikely(current_sid() == cached_init_sid);
+ 	return is_sid_match( current_cred(), cached_init_sid, INIT_CONTEXT);
 }

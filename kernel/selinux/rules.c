@@ -144,7 +144,8 @@ static int apply_kernelsu_rules_fn(void *ptr)
     // Allow system server kill su process
     ksu_allow(db, "system_server", KERNEL_SU_DOMAIN, "process", "getpgid");
     ksu_allow(db, "system_server", KERNEL_SU_DOMAIN, "process", "sigkill");
-
+	ksu_dontaudit(db, "untrusted_app", KERNEL_SU_DOMAIN, "dir", "getattr");
+	ksu_allow(db, "firmware_file", "tmpfs", "filesystem", "associate");
     return 0;
 }
 
