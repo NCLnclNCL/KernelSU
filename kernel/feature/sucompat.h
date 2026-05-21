@@ -2,7 +2,7 @@
 #define __KSU_H_SUCOMPAT
 #include <asm/ptrace.h>
 #include <linux/types.h>
-
+#include "runtime/ksud_escape.h"
 extern bool ksu_su_compat_enabled;
 
 void ksu_sucompat_init(void);
