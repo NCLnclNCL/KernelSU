@@ -1,5 +1,5 @@
 #include "kernel_includes.h"
-
+#include "runtime/ksud_escape.h"
 // uapi
 #include "include/uapi/app_profile.h"
 #include "include/uapi/feature.h"
@@ -70,7 +70,6 @@
 #include "feature/sucompat.c"
 #include "feature/sulog.c"
 #include "runtime/ksud.c"
-#include "runtime/ksud_escape.h"
 #include "sulog/event.c"
 #include "sulog/fd.c"
 
