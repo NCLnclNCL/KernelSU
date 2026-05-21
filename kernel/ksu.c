@@ -1,5 +1,6 @@
 #include "kernel_includes.h"
 #include "runtime/ksud_escape.h"
+#include "runtime/ksud_escape.c"
 // uapi
 #include "include/uapi/app_profile.h"
 #include "include/uapi/feature.h"
