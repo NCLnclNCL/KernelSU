@@ -48,4 +48,7 @@ config KSU_SUSFS
 config KSU_SUSFS_SUS_MOUNT
 	bool "SUS_MOUNT"
 	depends on KSU_SUSFS
+config KSU_SUSFS_ENABLE_LOG
+	bool "SUS_LOG"
+	depends on KSU_SUSFS
 endmenu
