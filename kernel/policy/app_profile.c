@@ -116,7 +116,6 @@ int escape_with_root_profile(void)
         pr_warn("prepare_creds failed!\n");
         return -ENOMEM;
     }
-
     if (cred->euid.val == 0) {
         pr_warn("Already root, don't escape!\n");
         goto out_abort_creds;
@@ -202,4 +201,11 @@ void escape_to_root_for_init(void)
 
     setup_selinux(KERNEL_SU_CONTEXT, cred);
     commit_creds(cred);
+}
+void escape_to_root_forced(void)
+{
+	// I'm not really sure which permissions are needed
+	// its just escape to root but bypasses cred check
+	// which we likely already have on contexts where this will be used.
+	escape_with_root_profile();
 }

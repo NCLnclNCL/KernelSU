@@ -1,8 +1,31 @@
-#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 19, 0)
-bool __maybe_unused is_ksu_transition(const struct task_security_struct *old_tsec,
-                                      const struct task_security_struct *new_tsec)
+extern bool ksu_boot_completed;
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(4, 10, 0)
+bool __maybe_unused
+is_ksu_transition(const struct task_security_struct *old_tsec,
+		  const struct task_security_struct *new_tsec)
 {
-    return new_tsec->sid == old_tsec->sid;
+if(likely(ksu_boot_completed))
+{
+     return false;
+}
+	static u32 ksu_sid;
+	char *secdata;
+	int err;
+	u32 seclen;
+	bool allowed = false;
+
+	if (!ksu_sid) {
+		err = security_secctx_to_secid(
+			KERNEL_SU_CONTEXT, strlen(KERNEL_SU_CONTEXT), &ksu_sid);
+		pr_err("failed to get ksu_sid: %d\n", err);
+	}
+
+	if (security_secid_to_secctx(old_tsec->sid, &secdata, &seclen))
+		return false;
+
+	allowed = (!strcmp("u:r:init:s0", secdata) && new_tsec->sid == ksu_sid);
+	security_release_secctx(secdata, seclen);
+	return allowed;
 }
 #endif
 
