@@ -49,11 +49,9 @@ static char __user *ksud_user_path(void)
 
 __attribute__((hot)) static __always_inline bool __is_su_allowed(const void **ptr_to_check)
 {
-    barrier();
     if (!ksu_su_compat_enabled)
         return false;
 
-    barrier();
     if (likely(!!current->seccomp.mode))
         return false;
 
